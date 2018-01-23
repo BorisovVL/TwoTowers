@@ -7,9 +7,24 @@ import android.graphics.Rect;
 
 public class Card
 {
+    public static int width = 70;
+    public static int height = 160;
+
+
 
 
     //------Methods block------//
+
+    ///Рисует карту из левого верхнего угла
+    /// выоста и ширина заданы в классе
+    public void drawCard(int x, int y, Canvas canvas)
+    {
+        Rect rect = new Rect(x, y , x + width, y + height);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        canvas.drawRect(rect, paint);
+    }
+
     ///рисует карту из левого верхнего угла x, y
     ///canvas - полотно на котором будем рисовать
     ///width - ширина карты
