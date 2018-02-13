@@ -19,6 +19,12 @@ public class Player
         cards.add(card);
     }
 
+    public void show_cards (Canvas canvas)
+    {
+        for (Card card : cards)
+            card.drawCard(canvas);
+    }
+
     //Tower tower;
     //Wall wall;
 

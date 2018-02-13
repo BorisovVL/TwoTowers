@@ -2,6 +2,7 @@ package vn.twotowers;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,20 +12,24 @@ import android.view.View;
 public class GameProcess extends View
 {
 
+    public static Canvas canva;
     public int card_to_card_dist = 20;
     public int timer = 0;
     public int bottom = 10; // расстояние от низа экрана
-    public int top = 10; // расстояине сверху экрана
-    public int left = 5; // расстояине слева экрана
+    public int top = 10; // расстояние сверху экрана
+    public int left = 5; // расстояние слева экрана
     public int right = 5; //расстояние справа экрана
     public Player me = new Player();
     public Player enemy = new Player();
+    public static Resources myResources ;
+
 
     int x, y;
 
     public GameProcess(Context context)
     {
         super(context);
+        myResources = getResources();
     }
 
     @Override
@@ -33,19 +38,12 @@ public class GameProcess extends View
         drawGrid(canvas);
         if (timer == 0)
         {
-            me.Add_card(new Card());
-            me.Add_card(new Card());
-            me.Add_card(new Card());
-            me.Add_card(new Card());
-            me.Add_card(new Card());
-            me.Add_card(new Card());
+            canva = canvas;
+            create_cards(me);
         }
-        Print_cards(me, canvas);
+
+        me.show_cards(canvas);
         timer++;
-        //Card c = new Card();
-        //c.drawCard(x, y, 50, 50, canvas);
-        //Start(canvas);
-        //invalidate();
     }
 
     // отрисовка вспомогательной сетки
@@ -64,14 +62,14 @@ public class GameProcess extends View
     }
 
     ///Выводим карты игрока (думаю что наши карты, карты соперника выводить нет смысла)
-    public void Print_cards (Player player, Canvas canvas)
+    public void create_cards (Player player)
     {
         int x = MainActivity.width / 2 - (Card.width) * 3 - 2 * card_to_card_dist - card_to_card_dist / 2;
         int y = MainActivity.height - Card.height - bottom;
 
-        for (Card card : player.cards)
+        for (int i = 0; i < 6; i++)
         {
-            card.drawCard(x, y, canvas);
+            player.Add_card(new Card(x, y));
             x += Card.width + card_to_card_dist;
         }
         invalidate();
@@ -93,7 +91,7 @@ public class GameProcess extends View
             for (Card card : me.cards)
             {
                 if (card.is_point_inside(x, y))
-                    card.change_color();
+                    card.change();
             }
 
             invalidate();
