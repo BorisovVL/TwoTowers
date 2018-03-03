@@ -7,34 +7,45 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 public class Card
 {
     Paint paint = new Paint(Color.BLACK);
+    Boolean is_fictive_card = false;
+    Boolean is_flying_card = false;
     Bitmap card;
-    int left;
-    int right;
-    int top;
-    int bottom;
-    boolean f = false;
+    public float dx = 0;
+    public float dy = 0;
 
-    public String name = "Card name"; // Название карты
-    public String description = "Description";  //описание карты
-    public String type = new String(); // тип карты: руда, мана, отряды
-    int MyTowerVal;     // значение на которое следует изменить мою башню
-    int MyWallVal;      // значение на которое следует изменить мою стену
-    int EnemyTowerVal;  //значение на которое следует изменить вражескую башню
-    int EnemyWallVal;   //значение накоторое следует изменить вражескую стену
+    public float to_x;
+    public float to_y;
+
+    float left;
+    float right;
+    float top;
+    float bottom;
+
 
     public static int width = MainActivity.width / 7; // ширина карты относительно текущего размера экрана
-    public static int height = (int)((double)MainActivity.height / 2.8); // высота карты относительно высоты экрана
+    public static int height = (int)((float)MainActivity.height / 2.8); // высота карты относительно высоты экрана
 
 
     //----------Methods block-----------//
 
+    public Card (Card card)
+    {
+        this.left = card.left;
+        this.top = card.top;
+        this.dx = card.dx;
+        this.dy = card.dy;
+        this.card = card.card;
+        this.is_fictive_card = card.is_fictive_card;
+    }
 
-    public Card (int left, int top)
+    public Card (float left, float top)
     {
         this.left = left;
         this.top = top;
@@ -42,33 +53,39 @@ public class Card
         this.bottom = top + height;
     }
 
+    public void setup_card_img(int res)
+    {
+        card = BitmapFactory.decodeResource(GameProcess.myResources, res);
+        card = Bitmap.createScaledBitmap(card, width, height, false);
+    }
+
     ///Рисует карту из левого верхнего угла
     ///Высота и ширина заданы в классе
     public void drawCard(Canvas canvas)
     {
-        if (!f)
-            card = BitmapFactory.decodeResource(GameProcess.myResources, R.drawable.sample_card);
-        else
-            card = BitmapFactory.decodeResource(GameProcess.myResources, R.drawable.sample2);
+        if (is_fictive_card)
+            return;
 
-        card = Bitmap.createScaledBitmap(card, width, height, false);
-        canvas.drawBitmap(card, left, top, paint);
+        if (card == null)
+            setup_card_img(R.drawable.sample_card);
+        canvas.drawBitmap(this.card, this.left, this.top, this.paint);
     }
 
     //принадлежит ли точка карте
-   public boolean is_point_inside (int x, int y)
+   public boolean is_point_inside (float x, float y)
    {
         return left <= x && x <= right && top <= y && y <= bottom;
    }
 
-    // ненужная хуйня просто чтобы изменить картинку на карте
-    public void change ()
+    public void move_on_vector(float x, float y)
     {
-        f = !f;
+        this.left += x;
+        this.top += y;
     }
-    public void move_to_point( )
-   {
-       //paint.setColor(Color.RED);
-   }
+
+    public boolean is_card_on_point (float x, float y)
+    {
+        return left - 3 <= x && x <= left + 3 && top - 3 <= y && y <= top + 3;
+    }
 
 } 
