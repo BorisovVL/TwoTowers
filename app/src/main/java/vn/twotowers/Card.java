@@ -22,6 +22,7 @@ public class Card
 
     public float to_x;
     public float to_y;
+    public int id;
 
     float left;
     float right;
@@ -39,6 +40,8 @@ public class Card
     {
         this.left = card.left;
         this.top = card.top;
+        this.bottom = card.bottom;
+        this.right = card.right;
         this.dx = card.dx;
         this.dy = card.dy;
         this.card = card.card;
@@ -80,7 +83,9 @@ public class Card
     public void move_on_vector(float x, float y)
     {
         this.left += x;
+        this.right += x;
         this.top += y;
+        this.bottom += y;
     }
 
     public boolean is_card_on_point (float x, float y)

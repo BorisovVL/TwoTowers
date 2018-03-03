@@ -21,6 +21,8 @@ public class GameProcess extends View
     ArrayList<Card> flying_card = new ArrayList<Card>();
     ArrayList<Card> deck = new ArrayList<Card>();
 
+    public Card back_card;
+
     public float xx = MainActivity.width / 2 - Card.width / 2;
     public float card_speed = 50;
     public int card_to_card_dist = 20;
@@ -55,7 +57,7 @@ public class GameProcess extends View
             {
                 Card now = new Card(tmp);
                 deck.add(now);
-                tmp.top += 7;
+                tmp.top += (float)Card.height / 15;
             }
         }
         else
@@ -75,12 +77,11 @@ public class GameProcess extends View
         ///тут у нас 2 варианта, либо мы ждем пока карта ляжет на стол
         ///либо выбираем карту
 
-
         for (Card card : flying_card)
             if (card.is_flying_card == false)
                 card.drawCard(canvas);
 
-        ///карта еще летит
+        ///проверям на полет карту которую мы выбрали на текущем шаге
         if (flying_card.isEmpty() == false)
         {
             Card now = flying_card.get((int)flying_card.size() - 1);
@@ -94,10 +95,27 @@ public class GameProcess extends View
                 now.is_flying_card = false;
             }
         }
-        else /// выбираем карту или делаем какие-то другие действия
+        else /// ни одна карта из выбранных не летит значит либо ход кончился, либо только начался либо идет, и нам предстоит выбрать карту
         {
 
         }
+
+
+        ///проверяем на полет карту которая идет к нам из колоды
+        if (back_card != null && back_card.is_flying_card)
+        {
+            if (back_card.is_card_on_point(back_card.to_x, back_card.to_y))
+            {
+                back_card.is_flying_card = false;
+                me.cards.set(back_card.id, back_card);
+            }
+            else
+            {
+                back_card.move_on_vector(back_card.dx, back_card.dy);
+                back_card.drawCard(canvas);
+            }
+        }
+
         //invalidate();
     }
 
@@ -122,6 +140,7 @@ public class GameProcess extends View
         canvas.drawLine(MainActivity.width - MainActivity.width / 8, 0, MainActivity.width - MainActivity.width / 8, MainActivity.height, new Paint(Color.GRAY));
     }
 
+
     ///Выводим карты игрока (думаю что наши карты, карты соперника выводить нет смысла)
     public void create_cards (Player player)
     {
@@ -130,7 +149,9 @@ public class GameProcess extends View
 
         for (int i = 0; i < 6; i++)
         {
-            player.Add_card(new Card(x, y));
+            Card now = new Card (x, y);
+            now.id = i;
+            player.Add_card(now);
             x += Card.width + card_to_card_dist;
         }
         invalidate();
@@ -160,21 +181,31 @@ public class GameProcess extends View
                     Card tmp = new Card(card);
                     card.is_fictive_card = true;
 
+                    back_card = new Card((float) (MainActivity.width / 2.0) - card_to_card_dist - Card.width * (float)1.5, top + 3 * (float)Card.height / 15);
+                    back_card.is_flying_card = true;
+                    back_card.dx = (card.left - back_card.left) / 100;
+                    back_card.dy = (card.top - back_card.top) / 100;
+                    back_card.to_x = card.left;
+                    back_card.to_y = card.top;
+                    back_card.id = card.id;
+                    back_card.setup_card_img(R.drawable.sample2);
+
+
                     float x, y;
 
                     if (flying_card.size() % 2 == 0)
-                        x = MainActivity.width / 2 - Card.width / 2;
+                        x = (float)MainActivity.width / 2 - (float)Card.width / 2;
                     else
-                        x = MainActivity.width / 2 + Card.width / 2 + card_to_card_dist;
+                        x = (float)MainActivity.width / 2 + (float)Card.width / 2 + card_to_card_dist;
 
-                    y = top + ((int)flying_card.size() / 2) * Card.height / 20;
+                    y = top + ((int)flying_card.size() / 2) * (float)Card.height / 10;
 
                     tmp.to_x = x;
                     tmp.to_y = y;
                     tmp.dx = (float) ((x - card.left) / 100.0);
                     tmp.dy = (float) ((y - card.top) / 100.0);
                     tmp.is_flying_card = true;
-                    tmp.setup_card_img(R.drawable.sample_card);
+                    
                     flying_card.add(tmp);
                     invalidate();
                 }
