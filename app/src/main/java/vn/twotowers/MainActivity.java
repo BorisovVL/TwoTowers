@@ -11,8 +11,8 @@ import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity
 {
-    public static int width;
-    public static int height;
+    public static float width;
+    public static float height;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

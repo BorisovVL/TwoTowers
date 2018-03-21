@@ -30,8 +30,10 @@ public class Card
     float bottom;
 
 
-    public static int width = MainActivity.width / 7; // ширина карты относительно текущего размера экрана
-    public static int height = (int)((float)MainActivity.height / 2.8); // высота карты относительно высоты экрана
+
+    ///константы подобраны опытным путем профессиональными каскадерами, просьба не повторять в домашних условиях!!!
+    public static int width = (int) (MainActivity.width / 6.7); // ширина карты относительно текущего размера экрана
+    public static int height = (int)(MainActivity.height / 2.5); // высота карты относительно высоты экрана
 
 
     //----------Methods block-----------//

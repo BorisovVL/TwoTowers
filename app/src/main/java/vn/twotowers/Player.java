@@ -10,6 +10,9 @@ public class Player
 {
     ArrayList<Card> cards = new ArrayList<Card>();
 
+    Wall wall;
+    Tower tower;
+
     public Player()
     {
     }
