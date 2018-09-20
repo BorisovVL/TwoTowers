@@ -6,8 +6,11 @@ import android.graphics.Paint;
 
 public class Tower
 {
-    public static float height = MainActivity.height / 2;
-    public static float width = MainActivity.width / 10;
+    public static float height = MainActivity.height / 2; ///максимальная высоат башни
+    public static float width = MainActivity.width / 10;  ///ширина башни
+    public float parts = 50; ///высота башни в игровых единицах
+    public float loc_height = height * (float)0.5;
+    public float loc_width = width;
     public float left;
     public float bottom;
     Paint p = new Paint();
@@ -24,16 +27,22 @@ public class Tower
         this.bottom = bottom;
     }
 
+
     public void draw (Canvas canvas)
     {
-
-
-        canvas.drawRect(left, bottom - height, left + width, bottom, p);
+        canvas.drawRect(left, bottom - loc_height, left + loc_width, bottom, p);
     }
     public void draw (Canvas canvas, float left, float bottom)
     {
-        canvas.drawRect(left, bottom - height, left + width, bottom, p);
+        canvas.drawRect(left, bottom - loc_height, left + loc_width, bottom, p);
     }
+
+    void change_height (int val)
+    {
+        float one = height / parts;
+        loc_height += val * one;
+    }
+
 
 
 } 

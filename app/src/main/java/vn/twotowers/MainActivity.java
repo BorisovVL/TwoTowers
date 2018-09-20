@@ -8,11 +8,13 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
 {
     public static float width;
     public static float height;
+    public static String PACKAGE_NAME;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -24,17 +26,23 @@ public class MainActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         width = size.x;
         height = size.y;
+        PACKAGE_NAME = getApplicationContext().getPackageName();
 
-        setContentView(R.layout.activity_main);
+        final TextView textStartGame = (TextView)findViewById(R.id.textView);
+
+
+        setContentView(R.layout.main_activity);
     }
 
     public void onClick (View view)
     {
-        setContentView(new GameProcess(this));
+        if (view.getId() == R.id.textView)
+            setContentView(new GameProcess(this));
     }
 }

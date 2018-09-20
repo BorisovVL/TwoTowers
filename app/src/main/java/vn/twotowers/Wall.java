@@ -8,6 +8,8 @@ public class Wall
 {
     public static float height = MainActivity.height / 2;
     public static float width = MainActivity.width / 18;
+    public float loc_height = height * (float)0.5;
+    public float loc_width = width;
     public float left;
     public float bottom;
     Paint p = new Paint();
@@ -26,15 +28,19 @@ public class Wall
 
     public void draw (Canvas canvas)
     {
-        canvas.drawRect(left, bottom - height, left + width, bottom, p);
+        canvas.drawRect(left, bottom - loc_height, left + loc_width, bottom, p);
     }
 
     public void draw (Canvas canvas, float left, float bottom)
     {
-        canvas.drawRect(left, bottom - height, left + width, bottom, p);
+        canvas.drawRect(left, bottom - loc_height, left + loc_width, bottom, p);
     }
 
-
+    void change_height (int val)
+    {
+        float one = height / (float)(50.0);
+        loc_height += val * one;
+    }
 
 
 } 
